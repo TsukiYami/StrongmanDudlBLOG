@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrongmanDudlBLOG", "StrongmanDudlBLOG\StrongmanDudlBLOG.csproj", "{3BB32507-9C89-4B42-ADFC-EEDA40D128E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackendStrongmanDudlBLOG", "BackendStrongmanDudlBLOG\BackendStrongmanDudlBLOG.csproj", "{0812C238-4D19-4D58-B72E-51C9C0C604C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entity", "Entity\Entity.csproj", "{6F5CEFBE-529A-43FE-8278-3AC3F4BDE088}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3BB32507-9C89-4B42-ADFC-EEDA40D128E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BB32507-9C89-4B42-ADFC-EEDA40D128E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BB32507-9C89-4B42-ADFC-EEDA40D128E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BB32507-9C89-4B42-ADFC-EEDA40D128E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0812C238-4D19-4D58-B72E-51C9C0C604C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0812C238-4D19-4D58-B72E-51C9C0C604C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0812C238-4D19-4D58-B72E-51C9C0C604C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0812C238-4D19-4D58-B72E-51C9C0C604C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F5CEFBE-529A-43FE-8278-3AC3F4BDE088}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F5CEFBE-529A-43FE-8278-3AC3F4BDE088}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F5CEFBE-529A-43FE-8278-3AC3F4BDE088}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F5CEFBE-529A-43FE-8278-3AC3F4BDE088}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
