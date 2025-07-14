@@ -5,9 +5,9 @@ namespace Entity.Entities;
 public class LoginEntity
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid nID { get; private set; }
+    public long nID { get; private set; }
 
-    public LoginEntity(Guid nId, string sUsername, string sEMail, byte[] sPassword)
+    public LoginEntity(long nId, string sUsername, string sEMail, byte[] sPassword)
     {
         nID = nId;
         this.sUsername = sUsername;
