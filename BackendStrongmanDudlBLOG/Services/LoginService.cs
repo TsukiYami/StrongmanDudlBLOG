@@ -43,8 +43,9 @@ public class LoginService
         return oLoginRepository.Get(nID);
     }
 
-    public (bool, Guid?) Login(string sUsername, string sEMail, string sPassword)
+    public (bool, Guid?) Login(long nID)
     {
-        LoginEntity oLoginEntity = oLoginRepository.GetUsere
+        LoginEntity oLoginEntity = oLoginRepository.Get(nID);
+        return (true, Guid.NewGuid());
     }
 }
