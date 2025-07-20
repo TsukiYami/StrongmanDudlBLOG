@@ -17,12 +17,12 @@ public class LoginService
         oLoginMapper = new LoginMapper();
     }
 
-    public bool PostLogin(PostLoginDTO oPostLoginDTO)
+    public bool Register(PostLoginDTO oPostLoginDTO)
     {
         LoginEntity oLoginEntity = oLoginMapper.PostLoginDTOToEntity(oPostLoginDTO);
         long nID = oLoginRepository.Insert(oLoginEntity);
 
-        if (nID > 1)
+        if (nID > 0)
         {
             return true;
         }
@@ -43,9 +43,14 @@ public class LoginService
         return oLoginRepository.Get(nID);
     }
 
-    public (bool, Guid?) Login(long nID)
+    public (bool, Guid?) Login(string sUsername, string sEMail, byte[] sPassword)
     {
-        LoginEntity oLoginEntity = oLoginRepository.Get(nID);
-        return (true, Guid.NewGuid());
+        LoginEntity oLoginEntity = oLoginRepository.Get(sUsername, sEMail);
+        if (oLoginEntity.sPassword == sPassword)
+        {
+            Guid oGUID = Guid.NewGuid();
+            return (true, oGUID);
+        }
+        return (false, null);
     }
 }
