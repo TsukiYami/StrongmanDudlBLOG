@@ -1,7 +1,6 @@
-﻿services:
+services:
   strongmandudlblog:
-    image: strongmandudlblog
+    image: ${DOCKER_REGISTRY-}strongmandudlblog
     build:
       context: .
       dockerfile: StrongmanDudlBLOG/Dockerfile
-
