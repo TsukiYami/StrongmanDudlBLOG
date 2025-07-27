@@ -1,6 +1,34 @@
 services:
   strongmandudlblog:
+    container_name: strongmandudblog-backend
     image: ${DOCKER_REGISTRY-}strongmandudlblog
     build:
       context: .
-      dockerfile: StrongmanDudlBLOG/Dockerfile
+      dockerfile: BackendStrongmanDudlBLOG/Dockerfile
+    depends_on:
+      - "postgres-strongmandudlblog-db"
+    expose:
+      - "5050"
+      - "5432"
+    ports:
+      - "5050:5050"
+        
+        
+  postgres-strongmandudlblog-db:
+    container_name: strongmandudlblog_db
+    image:
+      postgres
+    volumes:
+      - strongmandudlblog_db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: strongmandudlblog_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
+
+volumes:
+  strongmandudlblog-backend:
+  strongmandudlblog_db:

@@ -1,10 +1,5 @@
 using BackendStrongmanDudlBLOG.DB;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace BackendStrongmanDudlBLOG.Program;
 
@@ -20,7 +15,7 @@ public class Startup
     public void ConfigureServices(IServiceCollection oServices)
     {
         oServices.AddDbContext<BlogContext>(options =>
-            options.UseNpgsql("Host=host.docker.internal,5432; Database=pnp_db; Username=admin; Password=password"));
+            options.UseNpgsql("Host=host.docker.internal,5432; Database=strongmandudlblog_db; Username=admin; Password=password"));
         
         oServices.AddControllers();
         oServices.AddEndpointsApiExplorer();

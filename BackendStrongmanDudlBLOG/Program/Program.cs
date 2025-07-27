@@ -1,21 +1,19 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-
-namespace BackendStrongmanDudlBLOG.Program;
-
-public class Program
+namespace BackendStrongmanDudlBLOG.Program
 {
-    public static void Main(string[] args)
+    public class Program
     {
-        CreateHostBuilder(args).Build().Run();
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
+    
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseUrls("http://0.0.0.0:5050");
+                    webBuilder.UseKestrel();
+                });
     }
-
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-                webBuilder.UseUrls("http://0.0.0.0:5050");
-                webBuilder.UseKestrel();
-            });
 }
