@@ -17,7 +17,7 @@ public class LoginController : ControllerBase
         this.oLoginService = oLoginService;
     }
 
-    [HttpPost("RegisterUser")]
+    [HttpPost("Register")]
     public IActionResult Register(PostLoginDTO oPostLoginDTO)
     {
         string sHeaderBody = Request.Headers[RequestValues.HEADER_BODY];

@@ -43,7 +43,7 @@ public class LoginService
         return oLoginRepository.Get(nID);
     }
 
-    public (bool, Guid?) Login(string sUsername, string sEMail, byte[] sPassword)
+    public (bool, Guid?) Login(string sUsername, string sEMail, string sPassword)
     {
         LoginEntity oLoginEntity = oLoginRepository.Get(sUsername, sEMail);
         if (oLoginEntity.sPassword == sPassword)

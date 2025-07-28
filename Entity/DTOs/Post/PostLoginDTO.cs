@@ -2,7 +2,7 @@ namespace Entity.DTOs.Post;
 
 public class PostLoginDTO
 {
-    public PostLoginDTO(string sUsername, string sEMail, byte[] sPassword)
+    public PostLoginDTO(string sUsername, string sEMail, string sPassword)
     {
         this.sUsername = sUsername;
         this.sEMail = sEMail;
@@ -11,5 +11,5 @@ public class PostLoginDTO
 
     public string sUsername { get; private set; }
     public string sEMail { get; private set; }
-    public byte[] sPassword { get; private set; }
+    public string sPassword { get; private set; }
 }
