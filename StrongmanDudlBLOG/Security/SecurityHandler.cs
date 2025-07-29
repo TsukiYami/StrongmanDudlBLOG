@@ -1,4 +1,4 @@
-namespace BackendStrongmanDudlBLOG.Security;
+namespace StrongmanDudlBLOG.Security;
 
 public class SecurityHandler
 {

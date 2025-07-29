@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace BackendStrongmanDudlBLOG.Security;
+namespace StrongmanDudlBLOG.Security;
 
 public class Hashing
 {
