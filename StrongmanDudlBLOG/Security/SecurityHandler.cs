@@ -1,3 +1,5 @@
+using StrongmanDudlBLOG.Security.Encryption;
+
 namespace StrongmanDudlBLOG.Security;
 
 public class SecurityHandler
@@ -19,5 +21,10 @@ public class SecurityHandler
     public string Hash(string sPassword)
     {
         return new Hashing().Hash(sPassword);
+    }
+
+    public string RSAEncrypt(string sEMail, string sPassword)
+    {
+        return new RSA().EncryptStringToBytes_AES(sEMail, sPassword);
     }
 }
