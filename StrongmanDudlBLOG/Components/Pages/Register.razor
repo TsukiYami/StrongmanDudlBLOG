@@ -1,4 +1,5 @@
 @page "/Register/"
+@using System.Diagnostics
 @using Entity.DTOs.Post
 @using StrongmanDudlBLOG.APIConnection
 @using StrongmanDudlBLOG.Security
@@ -7,21 +8,26 @@
 
 <h3>Register</h3>
 <label>Username</label>
-<input type="text" value="@sUsername"/>
+<input type="text" bind="@sUsername"/>
 <label>Email</label>
-<input type="email" value="@sEMail"/>
+<input type="email" bind="@sEMail"/>
 <label>Password</label>
-<input type="password" value="@sPassword"/>
-<button @onactivate="Test">Register</button>
+<input type="password" bind="@sPassword"/>
+<button @onclick="Test">Register</button>
 @code {
-    string sUsername, sEMail, sPassword;
+    string sUsername, sEMail, sPassword, sEncryptedEMail, sEncryptedPassword, sHashedEMail, sHashedPassword;
 
-    private void Test()
+    private async Task Test()
     {
-        (sEMail, sPassword) = SecurityHandler.Instance.AESEncrypt(sEMail, sPassword);
-        (sEMail, sPassword) = SecurityHandler.Instance.Hash(sEMail, sPassword);
+        (sEncryptedEMail, sEncryptedPassword) = SecurityHandler.Instance.AESEncrypt(sEMail, sPassword);
+        (sHashedEMail, sHashedPassword) = SecurityHandler.Instance.Hash(sEMail + sEncryptedEMail, sPassword + sEncryptedPassword);
 
-        PostLoginDTO oDTO = new PostLoginDTO(sUsername, sEMail, sPassword);
+        Debug.WriteLine("Test-Methode wurde aufgerufen!");
+        Debug.WriteLine($"Username: {sUsername}");
+        Debug.WriteLine($"Email: {sEMail}");
+        Debug.WriteLine($"Password: {sPassword}");
+        
+        PostLoginDTO oDTO = new PostLoginDTO(sUsername, sHashedEMail, sHashedPassword);
         APIService.Instance.PostUser().User(oDTO);
     }
 }

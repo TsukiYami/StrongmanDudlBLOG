@@ -12,7 +12,7 @@ internal class PostToAPI : IPost
     private HttpClient oClient;
     private Guid oSessionToken;
     
-    private const string csAPILink = "https://localhost:5050/api/";
+    private const string csAPILink = "https://localhost:5083/api/";
 
 
     public PostToAPI()
@@ -47,7 +47,7 @@ internal class PostToAPI : IPost
 
     public bool User(PostLoginDTO oPostLoginDTO)
     {
-        string sURL = csAPILink + "Register/";
+        string sURL = csAPILink + "register/";
         using (HttpRequestMessage oRequest = PrepareRequest(sURL, JsonConvert.SerializeObject(oPostLoginDTO)))
         {
             StringContent oContent = new(JsonConvert.SerializeObject(oPostLoginDTO), Encoding.UTF8, "application/json");
