@@ -1,4 +1,6 @@
-@page "/Register"
+@page "/Register/"
+@using Entity.DTOs.Post
+@using StrongmanDudlBLOG.APIConnection
 @using StrongmanDudlBLOG.Security
 
 <PageTitle>Register</PageTitle>
@@ -10,7 +12,7 @@
 <input type="email" value="@sEMail"/>
 <label>Password</label>
 <input type="password" value="@sPassword"/>
-<button>Register</button>
+<button @onactivate="Test">Register</button>
 @code {
     string sUsername, sEMail, sPassword;
 
@@ -18,5 +20,8 @@
     {
         (sEMail, sPassword) = SecurityHandler.Instance.AESEncrypt(sEMail, sPassword);
         (sEMail, sPassword) = SecurityHandler.Instance.Hash(sEMail, sPassword);
+
+        PostLoginDTO oDTO = new PostLoginDTO(sUsername, sEMail, sPassword);
+        APIService.Instance.PostUser().User(oDTO);
     }
 }
