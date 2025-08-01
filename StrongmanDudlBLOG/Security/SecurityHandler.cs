@@ -5,6 +5,7 @@ namespace StrongmanDudlBLOG.Security;
 public class SecurityHandler
 {
     private static SecurityHandler _instance;
+    private static readonly Lock _lock = new();
 
     private SecurityHandler() { }
 
@@ -13,18 +14,28 @@ public class SecurityHandler
         get
         {
             if (_instance == null)
-                _instance = new();
+            {
+                lock (_lock)
+                {
+                    if (_instance == null)
+                    {
+                        _instance = new SecurityHandler();
+                    }
+                }
+            }
             return _instance;
         }
     }
     
-    public string Hash(string sPassword)
+    public (string, string) Hash(string sEMail, string sPassword)
     {
-        return new Hashing().Hash(sPassword);
+        return new Hashing().Hash(sEMail, sPassword);
     }
 
-    public string RSAEncrypt(string sEMail, string sPassword)
+    //public (string, string) RSAEncrypt(string sEMail, string sPassword) { }
+
+    public (string, string) AESEncrypt(string sEMail, string sPassword)
     {
-        return new RSA().EncryptStringToBytes_AES(sEMail, sPassword);
+        return new AES().Encrypt_AES(sEMail, sPassword);
     }
 }

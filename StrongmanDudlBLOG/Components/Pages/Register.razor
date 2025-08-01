@@ -1,4 +1,5 @@
 @page "/Register"
+@using StrongmanDudlBLOG.Security
 
 <PageTitle>Register</PageTitle>
 
@@ -12,6 +13,10 @@
 <button>Register</button>
 @code {
     string sUsername, sEMail, sPassword;
-    
-    
+
+    private void Test()
+    {
+        (sEMail, sPassword) = SecurityHandler.Instance.AESEncrypt(sEMail, sPassword);
+        (sEMail, sPassword) = SecurityHandler.Instance.Hash(sEMail, sPassword);
+    }
 }
