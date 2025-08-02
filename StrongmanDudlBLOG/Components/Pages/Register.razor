@@ -3,6 +3,7 @@
 @using Entity.DTOs.Post
 @using StrongmanDudlBLOG.APIConnection
 @using StrongmanDudlBLOG.Security
+@inject IJSRuntime JSRuntime
 
 <PageTitle>Register</PageTitle>
 
@@ -13,21 +14,76 @@
 <input type="email" bind="@sEMail"/>
 <label>Password</label>
 <input type="password" bind="@sPassword"/>
-<button @onclick="Test">Register</button>
+<button @onclick="Test" disabled="@bIsLoading">
+    @if (bIsLoading)
+    {
+        <span>Registrierung...</span>
+    }
+    else
+    {
+        <span>Register</span>
+    }
+</button>
+    
+@if (!string.IsNullOrEmpty(sMessage))
+{
+    <div class="alert @(bIsSuccess ? "alert-success" : "alert-danger")">
+        @sMessage
+    </div>
+}
+
+
 @code {
     string sUsername, sEMail, sPassword, sEncryptedEMail, sEncryptedPassword, sHashedEMail, sHashedPassword;
-
+    bool bIsLoading = false;
+    string sMessage = "";
+    bool bIsSuccess = false;
+    
     private async Task Test()
     {
-        (sEncryptedEMail, sEncryptedPassword) = SecurityHandler.Instance.AESEncrypt(sEMail, sPassword);
-        (sHashedEMail, sHashedPassword) = SecurityHandler.Instance.Hash(sEMail + sEncryptedEMail, sPassword + sEncryptedPassword);
+        if (string.IsNullOrEmpty(sUsername) || string.IsNullOrEmpty(sEMail) || string.IsNullOrEmpty(sPassword))
+        {
+            sMessage = "Please fill in all fields";
+            bIsSuccess = false;
+            return;
+        }
 
-        Debug.WriteLine("Test-Methode wurde aufgerufen!");
-        Debug.WriteLine($"Username: {sUsername}");
-        Debug.WriteLine($"Email: {sEMail}");
-        Debug.WriteLine($"Password: {sPassword}");
-        
-        PostLoginDTO oDTO = new PostLoginDTO(sUsername, sHashedEMail, sHashedPassword);
-        APIService.Instance.PostUser().User(oDTO);
+        bIsLoading = true;
+        sMessage = "";
+
+        try
+        {
+            (sEncryptedEMail, sEncryptedPassword) = SecurityHandler.Instance.AESEncrypt(sEMail, sPassword);
+            (sHashedEMail, sHashedPassword) = SecurityHandler.Instance.Hash(sEMail + sEncryptedEMail, sPassword + sEncryptedPassword);
+
+            Console.WriteLine($"{sUsername}");
+            await JSRuntime.InvokeVoidAsync("alert", $"Username: {sUsername}");
+            
+            PostLoginDTO oDTO = new PostLoginDTO(sUsername, sHashedEMail, sHashedPassword);
+            bool bSuccess = APIService.Instance.PostUser().User(oDTO);
+
+            if (bSuccess)
+            {
+                sMessage = "Registration successful!";
+                bIsSuccess = true;
+                sUsername = sEMail = sPassword = "";
+            }
+            else
+            {
+                sMessage = "Registration failed. Please try again.";
+                bIsSuccess = false;
+            }
+        }
+        catch (Exception e)
+        {
+            sMessage = $"Error: {e.Message}";
+            bIsSuccess = false;
+            Debug.WriteLine($"Registration error: {e}");
+        }
+        finally
+        {
+            bIsLoading = false;
+            StateHasChanged();
+        }
     }
 }

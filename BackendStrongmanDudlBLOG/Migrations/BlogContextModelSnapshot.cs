@@ -34,9 +34,9 @@ namespace BackendStrongmanDudlBLOG.Migrations
                         .HasColumnType("text")
                         .HasColumnName("EMail");
 
-                    b.Property<byte[]>("sPassword")
+                    b.Property<string>("sPassword")
                         .IsRequired()
-                        .HasColumnType("bytea")
+                        .HasColumnType("text")
                         .HasColumnName("Password");
 
                     b.Property<string>("sUsername")

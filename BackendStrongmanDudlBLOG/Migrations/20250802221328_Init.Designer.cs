@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackendStrongmanDudlBLOG.Migrations
 {
     [DbContext(typeof(BlogContext))]
-    [Migration("20250727113834_Init")]
+    [Migration("20250802221328_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -37,9 +37,9 @@ namespace BackendStrongmanDudlBLOG.Migrations
                         .HasColumnType("text")
                         .HasColumnName("EMail");
 
-                    b.Property<byte[]>("sPassword")
+                    b.Property<string>("sPassword")
                         .IsRequired()
-                        .HasColumnType("bytea")
+                        .HasColumnType("text")
                         .HasColumnName("Password");
 
                     b.Property<string>("sUsername")

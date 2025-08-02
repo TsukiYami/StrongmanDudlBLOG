@@ -1,10 +1,10 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-USER $APP_UID
+#USER $APP_UID
 WORKDIR /app
 EXPOSE 5050
 EXPOSE 5432
-ENV ASPNETCORE_HTTP_PORTS = 5050
-ENV ASPNETCORE_URLS = http://0.0.0.0:5050
+ENV ASPNETCORE_HTTP_PORTS=5050
+ENV ASPNETCORE_URLS=http://0.0.0.0:5050
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build

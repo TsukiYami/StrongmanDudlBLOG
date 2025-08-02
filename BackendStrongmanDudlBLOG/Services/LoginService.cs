@@ -3,6 +3,7 @@ using BackendStrongmanDudlBLOG.Mapper;
 using BackendStrongmanDudlBLOG.Repositories;
 using Entity.DTOs.Post;
 using Entity.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace BackendStrongmanDudlBLOG.Services;
 
@@ -10,16 +11,35 @@ public class LoginService
 {
     private LoginRepository oLoginRepository;
     private LoginMapper oLoginMapper;
+    private readonly BlogContext oContext;
 
     public LoginService(BlogContext oContext)
     {
         oLoginRepository = new LoginRepository(oContext);
         oLoginMapper = new LoginMapper();
+        this.oContext = oContext;
     }
 
     public bool Register(PostLoginDTO oPostLoginDTO)
     {
-        LoginEntity oLoginEntity = oLoginMapper.PostLoginDTOToEntity(oPostLoginDTO);
+        try
+        {
+            var user = new LoginEntity
+            {
+                sUsername = oPostLoginDTO.sUsername,
+                sEMail = oPostLoginDTO.sEMail,
+                sPassword = oPostLoginDTO.sPassword
+            };
+            oContext.Login.Add(user);
+            int nResult = oContext.SaveChanges();
+            return nResult > 0;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return false;
+        }
+        /*LoginEntity oLoginEntity = oLoginMapper.PostLoginDTOToEntity(oPostLoginDTO);
         long nID = oLoginRepository.Insert(oLoginEntity);
 
         if (nID > 0)
@@ -27,7 +47,7 @@ public class LoginService
             return true;
         }
         
-        return false;
+        return false;*/
     }
 
     public bool DeleteLogin(long nID)

@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace BackendStrongmanDudlBLOG.Controllers;
 
-[Route("/api/Login")]
+[Route("/api/")]
 [ApiController]
 public class LoginController : ControllerBase
 {
@@ -17,17 +17,43 @@ public class LoginController : ControllerBase
         this.oLoginService = oLoginService;
     }
 
-    [HttpPost("Register")]
-    public IActionResult Register(PostLoginDTO oPostLoginDTO)
+    [HttpPost("register/")]
+    public IActionResult Register()
     {
-        string sHeaderBody = Request.Headers[RequestValues.HEADER_BODY];
+        /*string sHeaderBody = Request.Headers[RequestValues.HEADER_BODY];
         oPostLoginDTO = JsonConvert.DeserializeObject<PostLoginDTO>(sHeaderBody);
 
+        if(oPostLoginDTO == null)
+            return BadRequest();
         if (oLoginService.Register(oPostLoginDTO))
-        {
-            return Created();
-        }
+            return Created("", "User registered successfully");
         
-        return BadRequest();
+        return BadRequest("Registration failed");*/
+        try
+        {
+            string sHeaderBody = Request.Headers[RequestValues.HEADER_BODY];
+            
+            if (string.IsNullOrEmpty(sHeaderBody))
+                return BadRequest("No data provided in header");
+                
+            PostLoginDTO oPostLoginDTO = JsonConvert.DeserializeObject<PostLoginDTO>(sHeaderBody);
+
+            if(oPostLoginDTO == null)
+                return BadRequest("Invalid data format");
+                
+            if (oLoginService.Register(oPostLoginDTO))
+                return Created("", "User registered successfully");
+            
+            return BadRequest("Registration failed");
+        }
+        catch (JsonException)
+        {
+            return BadRequest("Invalid JSON format");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+
     }
 }

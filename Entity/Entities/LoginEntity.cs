@@ -20,9 +20,10 @@ public class LoginEntity
         this.sEMail = sEMail;
         this.sPassword = sPassword;
     }
+    public LoginEntity() { }
 
-    public string sUsername { get; private set; }
-    public string sEMail { get; private set; }
-    public string sPassword { get; private set; }
+    public string sUsername { get; set; }
+    public string sEMail { get; set; }
+    public string sPassword { get; set; }
 
 }
