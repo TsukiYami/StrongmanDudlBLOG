@@ -8,12 +8,39 @@
 <PageTitle>Register</PageTitle>
 
 <h3>Register</h3>
-<label>Username</label>
-<input type="text" bind="@sUsername"/>
+<Form @FormName="RegisterForm" @onsubmit="Test" @onsubmit:preventDefault="true">
+    <div>
+        <label for="username">Username</label>
+        <input @bind="sUsername" />
+    </div>
+
+    <div>
+        <label for="email">Email</label>
+        <input @bind="sEMail" />
+    </div>
+
+    <div>
+        <label for="password">Password</label>
+        <input type="password" @bind="sPassword" /> @* InputText kann auch für Passwörter verwendet werden, oder InputPassword *@
+    </div>
+
+    <button type="submit" disabled="@bIsLoading">
+        @if (bIsLoading)
+        {
+            <span>Registrierung...</span>
+        }
+        else
+        {
+            <span>Register</span>
+        }
+    </button>
+</Form>
+@*<label>Username</label>
+<InputText type="text" @bind-Value="sUsername"/>
 <label>Email</label>
-<input type="email" bind="@sEMail"/>
+<InputText type="email" @bind-Value="sEMail"/>
 <label>Password</label>
-<input type="password" bind="@sPassword"/>
+<InputText type="password" @bind-Value="sPassword"/>
 <button @onclick="Test" disabled="@bIsLoading">
     @if (bIsLoading)
     {
@@ -23,7 +50,7 @@
     {
         <span>Register</span>
     }
-</button>
+</button>*@
     
 @if (!string.IsNullOrEmpty(sMessage))
 {
@@ -34,15 +61,17 @@
 
 
 @code {
-    string sUsername, sEMail, sPassword, sEncryptedEMail, sEncryptedPassword, sHashedEMail, sHashedPassword;
+    static string sUsername, sEMail, sPassword, sEncryptedEMail, sEncryptedPassword, sHashedEMail, sHashedPassword;
     bool bIsLoading = false;
     string sMessage = "";
     bool bIsSuccess = false;
     
     private async Task Test()
     {
+        Console.WriteLine("Es geht");
         if (string.IsNullOrEmpty(sUsername) || string.IsNullOrEmpty(sEMail) || string.IsNullOrEmpty(sPassword))
         {
+            Console.WriteLine($"Felder leer: Username={sUsername}, EMail={sEMail}, Password={sPassword}");
             sMessage = "Please fill in all fields";
             bIsSuccess = false;
             return;
@@ -57,9 +86,10 @@
             (sHashedEMail, sHashedPassword) = SecurityHandler.Instance.Hash(sEMail + sEncryptedEMail, sPassword + sEncryptedPassword);
 
             Console.WriteLine($"{sUsername}");
+            await JSRuntime.InvokeVoidAsync("console.log", $"{sUsername}");
             await JSRuntime.InvokeVoidAsync("alert", $"Username: {sUsername}");
-            
-            PostLoginDTO oDTO = new PostLoginDTO(sUsername, sHashedEMail, sHashedPassword);
+
+            PostLoginDTO oDTO = new (sUsername, sHashedEMail, sHashedPassword);
             bool bSuccess = APIService.Instance.PostUser().User(oDTO);
 
             if (bSuccess)
