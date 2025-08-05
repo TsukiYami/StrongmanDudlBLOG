@@ -1,26 +1,26 @@
 @page "/Register/"
+@rendermode InteractiveServer
 @using Entity.DTOs.Post
 @using StrongmanDudlBLOG.APIConnection
 @using StrongmanDudlBLOG.Security
-@inject IJSRuntime JSRuntime
 
 <PageTitle>Register</PageTitle>
 
 <h3>Register</h3>
-<Form @FormName="RegisterForm" @onsubmit="Test" @onsubmit:preventDefault="true">
+<EditForm Model="this" OnSubmit="Test" FormName="RegisterForm">
     <div>
-        <label for="username">Username</label>
-        <input @bind="sUsername" />
+        <label>Username</label>
+        <InputText @bind-Value="sUsername" />
     </div>
 
     <div>
-        <label for="email">Email</label>
-        <input @bind="sEMail" />
+        <label>Email</label>
+        <InputText @bind-Value="sEMail" />
     </div>
 
     <div>
-        <label for="password">Password</label>
-        <input type="password" @bind="sPassword" /> @* InputText kann auch für Passwörter verwendet werden, oder InputPassword *@
+        <label>Password</label>
+        <InputText type="password" @bind-Value="sPassword" />
     </div>
 
     <button type="submit" disabled="@bIsLoading">
@@ -33,23 +33,7 @@
             <span>Register</span>
         }
     </button>
-</Form>
-@*<label>Username</label>
-<InputText type="text" @bind-Value="sUsername"/>
-<label>Email</label>
-<InputText type="email" @bind-Value="sEMail"/>
-<label>Password</label>
-<InputText type="password" @bind-Value="sPassword"/>
-<button @onclick="Test" disabled="@bIsLoading">
-    @if (bIsLoading)
-    {
-        <span>Registrierung...</span>
-    }
-    else
-    {
-        <span>Register</span>
-    }
-</button>*@
+</EditForm>
     
 @if (!string.IsNullOrEmpty(sMessage))
 {
@@ -60,17 +44,17 @@
 
 
 @code {
-    static string sUsername, sEMail, sPassword, sEncryptedEMail, sEncryptedPassword, sHashedEMail, sHashedPassword;
+    string sUsername , sEMail, sPassword, sEncryptedEMail, sEncryptedPassword, sHashedEMail, sHashedPassword;
     bool bIsLoading = false;
     string sMessage = "";
     bool bIsSuccess = false;
     
     private async Task Test()
     {
-        Console.WriteLine("Es geht");
+        sMessage = "";
+        Console.WriteLine("Funktioniert");
         if (string.IsNullOrEmpty(sUsername) || string.IsNullOrEmpty(sEMail) || string.IsNullOrEmpty(sPassword))
         {
-            Console.WriteLine($"Felder leer: Username={sUsername}, EMail={sEMail}, Password={sPassword}");
             sMessage = "Please fill in all fields";
             bIsSuccess = false;
             return;
@@ -83,10 +67,6 @@
         {
             (sEncryptedEMail, sEncryptedPassword) = SecurityHandler.Instance.AESEncrypt(sEMail, sPassword);
             (sHashedEMail, sHashedPassword) = SecurityHandler.Instance.Hash(sEMail + sEncryptedEMail, sPassword + sEncryptedPassword);
-
-            Console.WriteLine($"{sUsername}");
-            await JSRuntime.InvokeVoidAsync("console.log", $"{sUsername}");
-            await JSRuntime.InvokeVoidAsync("alert", $"Username: {sUsername}");
 
             PostLoginDTO oDTO = new (sUsername, sHashedEMail, sHashedPassword);
             bool bSuccess = APIService.Instance.PostUser().User(oDTO);

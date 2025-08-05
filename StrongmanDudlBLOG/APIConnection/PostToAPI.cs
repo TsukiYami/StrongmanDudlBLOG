@@ -20,6 +20,7 @@ internal class PostToAPI : IPost
         oHandler = new HttpClientHandler();
         oHandler.ClientCertificateOptions = ClientCertificateOption.Manual;
         oHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
+        oClient = new HttpClient(oHandler);
     }
     
     ~PostToAPI()
@@ -27,28 +28,24 @@ internal class PostToAPI : IPost
         oHandler.Dispose();
     }
     
-    private HttpRequestMessage PrepareRequest(string sURL, string sBody)
+    private HttpRequestMessage PrepareRequest(string sURL)
     {
         try
         {
-            oClient = new HttpClient(oHandler);
-            using (HttpRequestMessage oRequest = new HttpRequestMessage(HttpMethod.Post, new Uri(sURL)))
-            {
-                oClient.DefaultRequestHeaders.Add(RequestValues.HEADER_TOKEN, oSessionToken.ToString());
-                oClient.DefaultRequestHeaders.Add(RequestValues.HEADER_BODY, sBody);
-                return oRequest;
-            }
+            HttpRequestMessage oRequest = new HttpRequestMessage(HttpMethod.Post, new Uri(sURL));
+            oClient.DefaultRequestHeaders.Add(RequestValues.HEADER_TOKEN, oSessionToken.ToString());
+            return oRequest;
         }
         catch (HttpRequestException)
         {
             return null;
         }
     }
-
+    
     public bool User(PostLoginDTO oPostLoginDTO)
     {
         string sURL = csAPILink + "register/";
-        using (HttpRequestMessage oRequest = PrepareRequest(sURL, JsonConvert.SerializeObject(oPostLoginDTO)))
+        using (HttpRequestMessage oRequest = PrepareRequest(sURL))
         {
             StringContent oContent = new(JsonConvert.SerializeObject(oPostLoginDTO), Encoding.UTF8, "application/json");
             using (HttpResponseMessage oResponse = oClient.PostAsync(oRequest.RequestUri, oContent).Result)
