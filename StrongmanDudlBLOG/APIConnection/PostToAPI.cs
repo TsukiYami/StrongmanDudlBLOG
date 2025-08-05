@@ -12,7 +12,7 @@ internal class PostToAPI : IPost
     private HttpClient oClient;
     private Guid oSessionToken;
     
-    private const string csAPILink = "https://localhost:5050/api/";
+    private const string csAPILink = "http://localhost:5050/api/";
 
 
     public PostToAPI()

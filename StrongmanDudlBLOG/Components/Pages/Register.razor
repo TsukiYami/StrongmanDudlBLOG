@@ -1,5 +1,4 @@
 @page "/Register/"
-@using System.Diagnostics
 @using Entity.DTOs.Post
 @using StrongmanDudlBLOG.APIConnection
 @using StrongmanDudlBLOG.Security
@@ -108,7 +107,6 @@
         {
             sMessage = $"Error: {e.Message}";
             bIsSuccess = false;
-            Debug.WriteLine($"Registration error: {e}");
         }
         finally
         {
