@@ -6,7 +6,7 @@ using StrongmanDudlBLOG.APIConnection.Interfaces;
 
 namespace StrongmanDudlBLOG.APIConnection;
 
-internal class PostToAPI : IPost
+internal class PostToAPI : IPost, IDisposable
 {
     private HttpClientHandler oHandler;
     private HttpClient oClient;
@@ -22,38 +22,93 @@ internal class PostToAPI : IPost
         oHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
         oClient = new HttpClient(oHandler);
     }
-    
-    ~PostToAPI()
+    public void Dispose()
     {
+        oClient.Dispose();
         oHandler.Dispose();
     }
     
-    private HttpRequestMessage PrepareRequest(string sURL)
+    
+    public async Task<bool> UserAsync(PostLoginDTO oPostLoginDTO)
     {
         try
         {
-            HttpRequestMessage oRequest = new HttpRequestMessage(HttpMethod.Post, new Uri(sURL));
-            oClient.DefaultRequestHeaders.Add(RequestValues.HEADER_TOKEN, oSessionToken.ToString());
-            return oRequest;
+            if (oPostLoginDTO == null)
+            {
+                Console.WriteLine("PostLoginDTO is null");
+                return false;
+            }
+
+            string sURL = csAPILink + "register/";
+            
+            using HttpRequestMessage oRequest = new(HttpMethod.Post, sURL);
+            
+            string sJson = JsonConvert.SerializeObject(oPostLoginDTO);
+            oRequest.Content = new StringContent(sJson, Encoding.UTF8, "application/json");
+            
+            if(oSessionToken == Guid.Empty)
+            {
+                oRequest.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", oSessionToken.ToString());
+            }
+            else
+            {
+                oRequest.Headers.Add(RequestValues.HEADER_TOKEN, oSessionToken.ToString());
+            }
+            
+            HttpResponseMessage oResponse = await oClient.SendAsync(oRequest);
+            
+            Console.WriteLine(oResponse.StatusCode);
+            Console.WriteLine(await oResponse.Content.ReadAsStringAsync());
+            
+            return oResponse.IsSuccessStatusCode;
         }
-        catch (HttpRequestException)
+        catch (Exception e)
         {
-            return null;
+            Console.WriteLine(e);
+            return false;
         }
     }
-    
-    public bool User(PostLoginDTO oPostLoginDTO)
+
+    public void SetSessionToken(Guid oSessionToken)
     {
-        string sURL = csAPILink + "register/";
-        using (HttpRequestMessage oRequest = PrepareRequest(sURL))
-        {
-            StringContent oContent = new(JsonConvert.SerializeObject(oPostLoginDTO), Encoding.UTF8, "application/json");
-            using (HttpResponseMessage oResponse = oClient.PostAsync(oRequest.RequestUri, oContent).Result)
-            {
-                if (oResponse.IsSuccessStatusCode)
-                    return true;
-            }
-        }
-        return false;
+        this.oSessionToken = oSessionToken;
     }
 }
+/*private HttpRequestMessage PrepareRequest(string sURL)
+     {
+         try
+         {
+             HttpRequestMessage oRequest = new HttpRequestMessage(HttpMethod.Post, sURL);
+             oRequest.Content = new StringContent(string.Empty, Encoding.UTF8, "application/json");
+             //oRequest.Headers.Add(RequestValues.HEADER_TOKEN, oSessionToken.ToString());
+             //oClient.DefaultRequestHeaders.Add(RequestValues.HEADER_TOKEN, oSessionToken.ToString());
+             if (RequestValues.HEADER_TOKEN == "Authorization")
+             {
+                 oRequest.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", oSessionToken.ToString());
+             }
+             else
+             {
+                 oRequest.Headers.Add(RequestValues.HEADER_TOKEN, oSessionToken.ToString());
+             }
+                 
+             return oRequest;
+         }
+         catch (HttpRequestException)
+         {
+             return null;
+         }
+     }*/
+/*public bool User(PostLoginDTO oPostLoginDTO)
+            {
+                string sURL = csAPILink + "register/";
+                using (HttpRequestMessage oRequest = PrepareRequest(sURL))
+                {
+                    //StringContent oContent = new(JsonConvert.SerializeObject(oPostLoginDTO), Encoding.UTF8, "application/json");
+                    using (HttpResponseMessage oResponse = oClient.PostAsync(oRequest.RequestUri, oContent).Result)
+                    {
+                        if (oResponse.IsSuccessStatusCode)
+                            return true;
+                    }
+                }
+                return false;
+            }*/

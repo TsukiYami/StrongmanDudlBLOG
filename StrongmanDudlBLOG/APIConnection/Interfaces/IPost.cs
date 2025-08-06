@@ -4,5 +4,5 @@ namespace StrongmanDudlBLOG.APIConnection.Interfaces;
 
 internal interface IPost
 {
-    public bool User(PostLoginDTO oPostUserDTO);
+    public Task<bool> UserAsync(PostLoginDTO oPostUserDTO);
 }

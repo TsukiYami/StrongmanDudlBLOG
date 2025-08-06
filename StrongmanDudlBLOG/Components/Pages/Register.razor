@@ -52,7 +52,6 @@
     private async Task Test()
     {
         sMessage = "";
-        Console.WriteLine("Funktioniert");
         if (string.IsNullOrEmpty(sUsername) || string.IsNullOrEmpty(sEMail) || string.IsNullOrEmpty(sPassword))
         {
             sMessage = "Please fill in all fields";
@@ -69,13 +68,14 @@
             (sHashedEMail, sHashedPassword) = SecurityHandler.Instance.Hash(sEMail + sEncryptedEMail, sPassword + sEncryptedPassword);
 
             PostLoginDTO oDTO = new (sUsername, sHashedEMail, sHashedPassword);
-            bool bSuccess = APIService.Instance.PostUser().User(oDTO);
+            bool bSuccess = await APIService.Instance.PostUser().UserAsync(oDTO);
 
             if (bSuccess)
             {
                 sMessage = "Registration successful!";
                 bIsSuccess = true;
                 sUsername = sEMail = sPassword = "";
+                Console.WriteLine("Funktioniert");
             }
             else
             {
