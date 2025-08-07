@@ -1,4 +1,5 @@
 using BackendStrongmanDudlBLOG.DB;
+using BackendStrongmanDudlBLOG.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackendStrongmanDudlBLOG.Program;
@@ -17,6 +18,7 @@ public class Startup
         oServices.AddDbContext<BlogContext>(options =>
             options.UseNpgsql("Host=host.docker.internal,5432; Database=strongmandudlblog_db; Username=admin; Password=password"));
         
+        oServices.AddScoped<LoginService>();
         oServices.AddControllers();
         oServices.AddEndpointsApiExplorer();
     }

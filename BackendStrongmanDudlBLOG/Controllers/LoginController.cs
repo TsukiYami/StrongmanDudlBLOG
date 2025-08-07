@@ -18,42 +18,35 @@ public class LoginController : ControllerBase
     }
 
     [HttpPost("register/")]
-    public IActionResult Register()
+    public IActionResult Register([FromBody] PostLoginDTO oPostLoginDTO)
     {
-        /*string sHeaderBody = Request.Headers[RequestValues.HEADER_BODY];
-        oPostLoginDTO = JsonConvert.DeserializeObject<PostLoginDTO>(sHeaderBody);
-
-        if(oPostLoginDTO == null)
-            return BadRequest();
-        if (oLoginService.Register(oPostLoginDTO))
-            return Created("", "User registered successfully");
-        
-        return BadRequest("Registration failed");*/
         try
         {
-            string sHeaderBody = Request.Headers[RequestValues.HEADER_BODY];
-            
-            if (string.IsNullOrEmpty(sHeaderBody))
-                return BadRequest("No data provided in header");
-                
-            PostLoginDTO oPostLoginDTO = JsonConvert.DeserializeObject<PostLoginDTO>(sHeaderBody);
-
             if(oPostLoginDTO == null)
                 return BadRequest("Invalid data format");
-                
-            if (oLoginService.Register(oPostLoginDTO))
+            
+            if(oLoginService.Register(oPostLoginDTO))
                 return Created("", "User registered successfully");
             
             return BadRequest("Registration failed");
         }
-        catch (JsonException)
+        catch (Exception e)
         {
-            return BadRequest("Invalid JSON format");
+            return StatusCode(500, $"Internal server error: {e.Message}");
         }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
-
     }
+
+    /*[HttpGet("login/{nID}")]
+    public IActionResult Login()
+    {
+        try
+        {
+            if(oLoginService.Login())
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }*/
 }

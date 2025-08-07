@@ -1,8 +1,8 @@
-namespace Entity.DTOs.Get;
+namespace Entity.DTOs.Put;
 
-public class GetLoginDTO
+public class PutLoginDTO
 {
-    public GetLoginDTO(string sUsername, string sEMail, string sPassword)
+    public PutLoginDTO(string sUsername, string sEMail, string sPassword)
     {
         this.sUsername = sUsername;
         this.sEMail = sEMail;

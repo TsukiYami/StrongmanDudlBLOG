@@ -10,13 +10,11 @@ namespace BackendStrongmanDudlBLOG.Services;
 public class LoginService
 {
     private LoginRepository oLoginRepository;
-    private LoginMapper oLoginMapper;
     private readonly BlogContext oContext;
 
     public LoginService(BlogContext oContext)
     {
         oLoginRepository = new LoginRepository(oContext);
-        oLoginMapper = new LoginMapper();
         this.oContext = oContext;
     }
 
@@ -39,15 +37,6 @@ public class LoginService
             Console.WriteLine(e);
             return false;
         }
-        /*LoginEntity oLoginEntity = oLoginMapper.PostLoginDTOToEntity(oPostLoginDTO);
-        long nID = oLoginRepository.Insert(oLoginEntity);
-
-        if (nID > 0)
-        {
-            return true;
-        }
-        
-        return false;*/
     }
 
     public bool DeleteLogin(long nID)
