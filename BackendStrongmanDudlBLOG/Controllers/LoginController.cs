@@ -1,6 +1,8 @@
+using BackendStrongmanDudlBLOG.Caches;
 using BackendStrongmanDudlBLOG.Services;
 using Entity;
 using Entity.DTOs.Post;
+using Entity.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -36,17 +38,39 @@ public class LoginController : ControllerBase
         }
     }
 
-    /*[HttpGet("login/{nID}")]
-    public IActionResult Login()
+    [HttpGet("login/")]
+    public IActionResult Login([FromBody] string sEMail, [FromBody] string sPassword)
     {
-        try
+        sEMail = Request.Headers[RequestValues.HEADER_EMAIL];
+        sPassword = Request.Headers[RequestValues.HEADER_PASSWORD];
+        
+        if(String.IsNullOrEmpty(sEMail) || String.IsNullOrEmpty(sPassword))
+            return BadRequest("Invalid data format");
+        
+        (bool, Guid?) oResult = oLoginService.Login(sEMail, sPassword);
+        if(oResult.Item1)
+            return Ok(oResult.Item2);
+        
+        return Unauthorized(oResult.Item2);
+    }
+
+    [HttpGet("logout")]
+    public IActionResult Logout()
+    {
+        string sToken = Request.Headers[RequestValues.HEADER_TOKEN];
+        
+        LogedInUserCache.Remove(Guid.Parse(sToken));
+        
+        return BadRequest();
+    }
+
+    [HttpDelete("delete/{nID}")]
+    public IActionResult Delete(long nID)
+    {
+        if (oLoginService.DeleteLogin(nID) == false)
         {
-            if(oLoginService.Login())
+            return BadRequest("Deletion failed");
         }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-    }*/
+        return BadRequest();
+    }
 }

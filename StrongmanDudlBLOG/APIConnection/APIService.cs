@@ -17,15 +17,10 @@ internal class APIService
     {
         get
         {
-            if (_instance == null)
+            if (_instance != null) return _instance;
+            lock (_lock)
             {
-                lock (_lock)
-                {
-                    if (_instance == null)
-                    {
-                        _instance = new APIService();
-                    }
-                }
+                _instance ??= new APIService();
             }
             return _instance;
         }

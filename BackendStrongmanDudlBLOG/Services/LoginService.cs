@@ -1,3 +1,4 @@
+using BackendStrongmanDudlBLOG.Caches;
 using BackendStrongmanDudlBLOG.DB;
 using BackendStrongmanDudlBLOG.Mapper;
 using BackendStrongmanDudlBLOG.Repositories;
@@ -52,13 +53,14 @@ public class LoginService
         return oLoginRepository.Get(nID);
     }
 
-    public (bool, Guid?) Login(string sUsername, string sEMail, string sPassword)
+    public (bool, Guid?) Login(string sEMail, string sPassword)
     {
-        LoginEntity oLoginEntity = oLoginRepository.Get(sUsername, sEMail);
+        LoginEntity oLoginEntity = oLoginRepository.Get(sEMail);
         if (oLoginEntity.sPassword == sPassword)
         {
             Guid oGUID = Guid.NewGuid();
-            return (true, oGUID);
+            if(LogedInUserCache.Add(oGUID, oLoginEntity))
+                return (true, oGUID);
         }
         return (false, null);
     }

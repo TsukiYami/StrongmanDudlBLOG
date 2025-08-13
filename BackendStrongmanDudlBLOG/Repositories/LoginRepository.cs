@@ -44,9 +44,9 @@ public class LoginRepository : IRepository<LoginEntity>
         return oContext.Login.Where(e => e.nID == nID).FirstOrDefault();
     }
 
-    public LoginEntity Get(string sUsername, string sEMail)
+    public LoginEntity Get(string sEMail)
     {
-        return oContext.Login.Where(e => e.sUsername == sUsername || e.sEMail == sEMail).FirstOrDefault();
+        return oContext.Login.Where(e => e.sEMail == sEMail).FirstOrDefault();
     }
 
     public long Insert(LoginEntity oEntity)

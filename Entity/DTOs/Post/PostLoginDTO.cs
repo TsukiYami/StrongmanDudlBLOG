@@ -11,9 +11,9 @@ public class PostLoginDTO
         this.sPassword = sPassword;
     }
     
-    public string sUsername { get; set; }
+    public string sUsername { get; private set; }
     
-    public string sEMail { get; set; }
+    public string sEMail { get; private set; }
     
-    public string sPassword { get; set; }
+    public string sPassword { get; private set; }
 }
